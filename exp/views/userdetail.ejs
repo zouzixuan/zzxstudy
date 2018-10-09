@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8">
+    <title>用户详情</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="referrer" content="no-referrer"/>
+    <link href="http://fonts.googleapis.com/css?family=Oxygen|Marck+Script" rel="stylesheet" type="text/css">
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/font-awesome.css" rel="stylesheet">
+    <link href="assets/css/admin.css" rel="stylesheet">
+    <link rel="shortcut icon" href="#" >
+    
+<style>
+.introduce{display: block;
+                display: -webkit-box;
+                margin: 0 auto;
+                -webkit-line-clamp: 2;    
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;margin-bottom: 20px;cursor: pointer;}
+                .introduce:hover{text-decoration: underline;}
+</style>
+</head>    
+<body>
+
+<div class="container">
+		
+	<div class="row">
+		
+		<div class="span2">
+		
+		<div class="main-left-col">
+		
+			<h1><i class="icon-shopping-cart icon-large"></i>zzxlibraby</h1>
+			
+			<ul class="side-nav">
+
+				<li class="active">
+					<a href="/"><i class="icon-home"></i> 首页概况</a>
+				</li>
+				<li class="dropdown">
+            <a href="/lend"><i class="icon-sitemap"></i> 借阅管理</a>
+					
+				</li>
+				<li class="dropdown">
+            <a href="/bookslist"><i class="icon-shopping-cart"></i> 全部图书</a>
+				</li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="collapse" data-target="#reports-dropdown" href="#"><i class="icon-signal"></i> 评论管理 <b class="caret"></b></a>
+					<ul id="reports-dropdown" class="collapse">
+						<li><a href="/commentslist">评论列表</a></li>
+					
+					</ul>
+				</li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="collapse" data-target="#members-dropdown" ><i class="icon-group"></i> 会员管理 <b class="caret"></b></a>
+					<ul id="members-dropdown" class="collapse">
+						<li><a href="/users">所有会员</a></li>
+						<li><a href="/userdetail?username=<%- username%>">修改我的信息</a></li>
+						<li><a href="/changeAdmin">修改管理员权限</a></li>
+					</ul>
+				</li>
+				<li><a href="/notice"><i class="icon-bullhorn"></i> 公告 </a></li>
+			</ul>
+		
+		</div> <!-- end main-left-col -->
+	
+	</div> <!-- end span2 -->
+	
+	<div class="span10">
+		
+	<div class="secondary-masthead">
+	
+		<ul class="nav nav-pills pull-right">
+			<li>
+				<a href="/chat"><i class="icon-globe"></i> 进入多人在线聊天室~</a>
+			</li>
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> <%- username%> <b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a href="/userdetail?username=<%- username%>"><%- username%>的信息</a></li>
+					<li class="active"><a href="/notice">欢迎来我的网站~</a></li>
+					<li class="divider"></li>
+					<li><a href="loginout">注销</a></li>
+				</ul>
+			</li>
+		</ul>
+
+		<ul class="breadcrumb">
+			<li>
+				<a href="/">zzx图书管理系统</a> <span class="divider">/</span>
+			</li>
+            <li class="active"><a href="/users">所有用户</a></li>
+            <span class="divider">/</span>
+			</li>
+            <li class="active">用户详情</li>
+		</ul>
+		
+	</div>
+	
+    <!--下面是 内容 -->
+ <%   if(username2==username){   %>
+   <div class="row" style="margin-top: 20px">
+       <div class="span10">
+           <button class="btn btn-info" data-toggle="modal" data-target="#updatebox">修改我的密码</button>
+       </div>
+   </div>
+  <% }  %>
+    <div class="row" style="margin-top: 30px">
+		
+			<div class="span10">
+			
+				<div class="slate">
+				
+					<div class="page-header">
+						<h2><a class="pull-right iconlink" href=""><i class="icon-rss"></i></a><%- username2%>的借阅</h2>
+					</div>
+				
+					<table class="orders-table table">
+                        <thead>
+                            <th>序号</th>
+                            <th>书名</th>
+                            <th >借阅情况</th>
+                            <th class="date">借阅时间</th>
+                            <th class="actions">操作</th>
+                        </thead>
+					<tbody>
+                        
+  <%      if(results.one[0]){  %>
+               <%         results.one.forEach(function(item,index){   %>
+                            <tr>
+                                <td><%- ++index %></td>
+                                <td ><a href="/bookdetail?id=<%- item._id%>"><%- item.title %></a></td>
+                                <%	if(item.status==0){  %>
+                                    <td>已归还</td>
+                        <%		}else{  %>
+                                    <td>已借出</td>
+                        <%	}  %>
+                                <td ><%- item.outTime %></td>
+                                <td  class="actions">
+                              <%      if(username2==username||isAdmin==1||isAdmin==2){   %>
+                                    <a class="btn btn-small btn-info" href="/lend/return?id=<%- item._id%>&go=1&username2=<%- username2%>">归还</a>
+                     <%           }   %>
+                                </td>
+                            </tr>
+              <%          })   %>
+              <%          }else{  %>
+                            <tr>
+                                <td style="font-size: 20px">暂无借阅</td>
+                            </tr>
+         <%               }  %>
+					</tbody>
+					</table>
+
+				</div>
+			
+			</div>
+		
+
+		
+        </div>
+        
+
+        <div class="row">
+		
+                <div class="span10">
+                
+                    <div class="slate">
+                    
+                        <div class="page-header">
+                            <h2><a class="pull-right iconlink" href=""><i class="icon-rss"></i></a><%- username2%>的评论</h2>
+                        </div>
+                    
+                        <table class="orders-table table">
+                            <thead>
+                                <th>序号</th>
+                                <th>书名</th>
+                                <th >评论内容</th>
+                                <th class="date">评论时间</th>
+                                <th class="actions">操作</th>
+                            </thead>
+                        <tbody>
+        <%      if(results.two[0]){  %>                     
+        <%            results.two.forEach(function(item,index){  %>
+                <tr>
+                        <td><%- ++index%></th>
+                        <td><a href="/bookdetail?id=<%- item.bookid%>"><%- item.booktitle%></a></th>
+                        <td ><%- item.content%></th>
+                        <td ><%- item.enterTime%></th>
+                        <td class="actions">
+                                <%      if(username2==username||isAdmin==1||isAdmin==2){   %>
+                                <a class="btn btn-small btn-info" data-toggle="modal" href="#removeItem" onclick="setDelId('<%- item._id  %>')">删除</a>
+                                <% } %>
+                        </th>
+                </tr>
+          <%            })   %>
+    <%        }else{  %>
+                <tr>
+                        <td style="font-size: 20px">暂无评论</td>
+                    </tr>
+   <%         }  %>
+                            
+                        </tbody>
+                        </table>
+    
+                    </div>
+                
+                </div>
+            
+    
+            
+            </div>
+		
+		<div class="row">
+		
+			<div class="span10 footer">
+			
+				<p>&copy; 皮皮璇科技有限公司</p>
+			
+			</div>
+		
+		</div>
+		
+	</div>
+	
+	</div> <!-- end span10 -->
+		
+	</div> <!-- end row -->
+		
+</div> <!-- end container -->
+
+
+<div class="modal hide fade" id="removeItem">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3>删除</h3>
+    </div>
+    <div class="modal-body">
+        <p>你真的要删除它吗？</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">关闭</a>
+        <a href="#" class="btn btn-danger" onclick="del()">删除</a>
+    </div>
+</div>	
+
+
+
+
+<div class="modal fade hide " tabindex="-1" role="dialog" id="updatebox">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">修改密码</h4>
+        </div>
+        <div class="modal-body">
+            <form   action="/users/changeUserpwd" method="POST">
+                <div class="form-group ">
+                    <label for="userpwdControl">原密码</label>
+                    
+                    <input type="password" class="form-control " id="userpwdControl"  name="userpwd" placeholder="请输入原密码" style="width: 80%">
+                    <!-- <p id="booktitle_span">至少要输入个名字吧啊喂~</p> -->
+                </div>
+                <div class="form-group">
+                    <label for="newuserpwdControl">新密码</label>
+                    <input type="password" class="form-control" id="newuserpwdControl"  name="newuserpwd" placeholder="请输入新密码" style="width: 80%">
+                </div> 
+                   
+            
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary" >确定</a>
+        </div>
+    </form>
+        </div>
+    </div>
+</div>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.js"></script>
+<script src="assets/js/excanvas.min.js"></script>
+<script src="assets/js/jquery.flot.min.js"></script>
+<script src="assets/js/jquery.flot.resize.js"></script>
+<script type="text/javascript">
+
+var delId = null
+function setDelId(id){
+	delId = id;
+    console.log(delId);
+}
+
+function del(){
+	$.ajax({
+		url:"/comments/delete",
+		method:'get',
+		data:{
+			id:delId,
+		},
+		success(result){
+			console.log(result);
+			$("#removeItem").modal("toggle");  // toggle 开关  
+			if(result["code"]==2){
+				alert(result["msg"])
+				window.location.reload()
+			}else{
+				alert(result["msg"])
+			}
+			
+		}
+	})
+}
+
+
+
+
+$(function () {
+    var d1 = [];
+        d1.push([0, 32]);
+        d1.push([1, 30]);
+        d1.push([2, 24]);
+        d1.push([3, 17]);
+        d1.push([4, 11]);
+        d1.push([5, 25]);
+        d1.push([6, 28]);
+        d1.push([7, 36]);
+        d1.push([8, 44]);
+        d1.push([9, 52]);
+        d1.push([10, 53]);
+        d1.push([11, 50]);
+        d1.push([12, 45]);
+        d1.push([13, 42]);
+        d1.push([14, 40]);
+        d1.push([15, 36]);
+        d1.push([16, 34]);
+        d1.push([17, 24]);
+        d1.push([18, 17]);
+        d1.push([19, 17]);
+        d1.push([20, 20]);
+        d1.push([21, 28]);
+        d1.push([22, 36]);
+        d1.push([23, 38]);
+
+    $.plot($("#placeholder"), [ d1 ], { grid: { backgroundColor: 'white', color: '#999', borderWidth: 1, borderColor: '#DDD' }, colors: ["#FC6B0A"], series: { lines: { show: true, fill: true, fillColor: "rgba(253,108,11,0.4)" } } });
+});
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>zzx聊天室</title>
+    <script src="bootstrap/js/jquery-1.10.1.js"></script>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <style>
+
+        #box{
+            width:100%;
+            height:100%;
+            position: absolute;
+            top:0;
+            left: 0;
+            background: rgba(0, 0, 0, .6);
+        }
+
+        #inner{
+            border:2px solid red;
+            border-radius: 10px;
+            width:300px;
+            height: 180px;
+            margin: auto;
+            position: absolute;
+            left:0;
+            top:0;
+            bottom: 0;
+            right: 0;
+            z-index:100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #h2{
+            color:cyan;
+        }
+        .h3{
+            color:#fff;
+        }
+        #inp{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+     <div class="col-xs-12 col-sm-12 col-md-12 text-center text-warning">
+        <h3 id="title">SocketIo -- 聊天室</h3>
+        
+        <h4>欢迎：<span id="username"><%- username%></span></h4>
+        <h4>实时在线人数 ---- <b id="count">0</b> </h4> 
+    </div>
+    
+    
+
+    <div class=" col-xs-12 col-sm-12 col-md-12">
+            <div class="clearfix">
+        <div class=" col-xs-12 col-sm-12 col-md-6  col-md-offset-3  ">
+                
+            <div id="chatroom" class="bg-info" style="height:380px;font-size:20px;overflow: auto;">
+
+            </div>
+          
+                <input class=" form-control" type="text" placeholder="请输入聊天内容" id="sayword">
+                <input class="pull-left btn btn-warning" type="button" value="返回" id="goback" >
+                <input class="pull-right btn btn-primary" type="button" value="发送" id="btn" >
+          
+        </div>
+        </div>
+        
+      </div>
+
+
+      
+   
+
+
+    <script src="/socket.io.js"></script>
+    
+    <script>
+        // 客户端 socket 
+        // 1. 连接 server socket
+        // 2. 发现消息给  服务端 socket
+        // 3. 监听 服务端socket 发来的消息
+        // 4. 监听 服务端socket 关闭 / error 
+
+        goback.onclick=function(){
+            window.history.go(-1)
+        }
+
+        var socketIo = null;
+        console.log(io);
+
+        var username=$("#username").html()
+
+        window.onload = function(){
+            socketIo = io.connect("http://47.94.9.102:8080");   // 连接服务端 socket 
+            
+            // 监听连接状态 是否成功
+            socketIo.on("connect",()=>{
+                console.log("来自客户端的连接");
+                socketIo.emit("login",username)
+                // $$id("h2").style.display = "none";
+                // $$id("inp").style.display = "block";
+            })
+
+
+            
+            // 监听人数变化 
+            socketIo.on("setOnLineCount",(count)=>{
+                $("#count").html(count)
+            });
+
+            function displayMsg(msg,color){
+                $("#chatroom").append(`<p style='color:${color}'>${msg}</p>`) 
+                $("#chatroom").scrollTop($("#chatroom")[0].scrollHeight)
+            }
+            
+            socketIo.on("system",(value)=>{
+                displayMsg(`系统消息: ${value} 上线了....`,'red');
+            });
+            
+
+            btn.onclick=function(){
+                socketIo.emit("sendClientMsg",sayword.value);
+                sayword.value = "";
+            }
+
+    
+            document.onkeydown = function(e){
+               
+                if(e.keyCode == 13){
+                    socketIo.emit("sendClientMsg",sayword.value);
+                    sayword.value = "";
+                }
+            }
+
+            socketIo.on("showMsg",(username,msg)=>{
+                displayMsg(`${username} 说 : ${msg}`,'#333');
+            })
+
+            // 4. 监听 服务端socket 关闭 / error 
+            socketIo.on("disconnect",()=>{
+                alert("服务器socket 失去响应 !!!")
+            });
+
+        }
+    </script>
+</body>
+</html>

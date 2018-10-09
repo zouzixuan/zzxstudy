@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8">
+    <title>首页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="referrer" content="no-referrer"/>
+    <link href="http://fonts.googleapis.com/css?family=Oxygen|Marck+Script" rel="stylesheet" type="text/css">
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/font-awesome.css" rel="stylesheet">
+    <link href="assets/css/admin.css" rel="stylesheet">
+    <link rel="shortcut icon" href="#" >
+
+
+</head>    
+<body>
+
+<div class="container">
+		
+	<div class="row">
+		
+		<div class="span2">
+		
+		<div class="main-left-col">
+		
+			<h1><i class="icon-shopping-cart icon-large"></i>zzxlibraby</h1>
+			
+			<ul class="side-nav">
+
+				<li class="active">
+					<a href="/"><i class="icon-home"></i> 首页概况</a>
+				</li>
+				<li class="dropdown">
+            <a href="/lend"><i class="icon-sitemap"></i> 借阅管理</a>
+					
+				</li>
+				<li class="dropdown">
+            <a href="/bookslist"><i class="icon-shopping-cart"></i> 全部图书</a>
+				</li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="collapse" data-target="#reports-dropdown" href="#"><i class="icon-signal"></i> 评论管理 <b class="caret"></b></a>
+					<ul id="reports-dropdown" class="collapse">
+						<li><a href="/commentslist">评论列表</a></li>
+			
+					</ul>
+				</li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="collapse" data-target="#members-dropdown" href="#"><i class="icon-group"></i> 会员管理 <b class="caret"></b></a>
+					<ul id="members-dropdown" class="collapse">
+						<li><a href="/users">所有会员</a></li>
+						<li><a href="/userdetail?username=<%- username%>">修改我的信息</a></li>
+						<li><a href="/changeAdmin">修改管理员权限</a></li>
+					</ul>
+				</li>
+				<li><a href="/notice"><i class="icon-bullhorn"></i> 公告 </a></li>
+			</ul>
+		
+		</div> <!-- end main-left-col -->
+	
+	</div> <!-- end span2 -->
+	
+	<div class="span10">
+		
+	<div class="secondary-masthead">
+	
+		<ul class="nav nav-pills pull-right">
+			<li>
+				<a href="/chat"><i class="icon-globe"></i> 进入多人在线聊天室~</a>
+			</li>
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> <%- username%> <b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a href="/userdetail?username=<%- username%>"><%- username%>的信息</a></li>
+					<li class="active"><a href="/notice">欢迎来我的网站~</a></li>
+					<li class="divider"></li>
+					<li><a href="loginout">注销</a></li>
+				</ul>
+			</li>
+		</ul>
+
+		<ul class="breadcrumb">
+			<li>
+				<a href="#">zzx图书管理系统</a> <span class="divider">/</span>
+			</li>
+			<li class="active">全部图书</li>
+		</ul>
+		
+    </div>
+    
+<!-- 差内容	 -->
+<div class="main-area dashboard">
+	
+	<div class="alert alert-info">
+		<a class="close" data-dismiss="alert" href="#">x</a>
+		<h4 class="alert-heading">本页使用说明：</h4>
+		1.分页不会刷新排序效果！可叠加！2.基本搜索排序分页功能；3.点击书名可进入详情+评论页面，评完即时刷新；4.其他功能：一般用户（0）没有任何权限，只能评论，管理员（1）可删除编辑添加，超级管理员（2）可删除全部资源，管理其他用户权限等。;
+	</div>
+	
+	<div class="row">
+	
+		<div class="span10">
+		
+			<div class="slate">
+			
+				<form class="form-inline" method="GET" action="/bookslist">
+					
+					<input type="text" class="input-large" placeholder="请输入书名关键字..." name="key">
+					<button type="submit" class="btn btn-info">搜索</button>
+					
+					<a href="/bookslist?filed=price&sort=-1" class="btn btn-default">价格降序</a>
+					<a href="/bookslist?filed=price&sort=1" class="btn btn-default">价格升序</a>
+					<a href="/bookslist?filed=rating.average&sort=-1" class="btn btn-default">评分降序</a>
+					<a href="/bookslist?filed=rating.average&sort=1" class="btn btn-default">评分升序</a>
+				</form>
+			
+			</div>
+		
+		</div>
+	
+	</div>
+	
+	<div class="row">
+		
+		<div class="span10 listing-buttons">
+		
+		<!-- 	<button class="btn btn-info">Action</button> -->
+		
+			<button class="btn btn-danger" data-toggle="modal" href="#removeItem" onclick="setDelId('-1')">删除全部</button>
+		
+			<button class="btn btn-primary" data-toggle="modal" data-target="#insertbox">添加书籍</button>
+		
+		</div>
+		
+		<div class="span10">
+		
+			<div class="slate">
+			
+				<div class="page-header">
+					<div class="btn-group pull-right">
+						<button class="btn dropdown-toggle" data-toggle="dropdown">
+							<i class="icon-download-alt"></i>打印导出
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li><a href="">CSV</a></li>
+							<li><a href="">Excel</a></li>
+							<li><a href="">PDF</a></li>
+						</ul>
+					</div>
+					<h2>My Books Listings</h2>
+				</div>
+			
+				<table class="orders-table table">
+				<thead>
+					<tr>
+						<th>图书信息</th>
+						<th>价格</th>
+						<th>作者</th>
+						<th class="actions">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- <tr>
+						<td><a href="form.html">Listing title</a> <span class="label label-info">Item Status</span><br /><span class="meta">Added Today</span></td>
+						<td>price</td>
+						<td>zuozhe </td>
+						<td class="actions">
+							<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>
+							<a class="btn btn-small btn-primary" href="form.html">编辑</a>
+						</td>
+					</tr> -->
+				<%	result.forEach(function(item,index){   %>
+						<tr>
+							<td><a href="/bookdetail?id=<%- item._id%>"><%- item.title%></a> <span class="label label-info"><%- item.rating.average%></span><br /><span class="meta"><%- item.publisher%></span></td>
+							<td><%- item.price%></td>
+							<td><%- item.author%></td>
+							<td class="actions">
+								<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem" onclick="setDelId('<%- item._id  %>')">删除</a>
+								<a class="btn btn-small btn-primary" data-toggle="modal" data-target="#updatebox" onclick="update('<%= item._id %>','<%= item.title %>','<%- item.price %>','<%- item.author %>','<%- item.publisher %>')">编辑</a>
+							</td>
+						</tr>
+				<%	})  %>
+					<!-- 重复 -->
+				</tbody>
+			</table>
+			</div>	
+		</div>	
+		<div class="modal hide fade" id="removeItem">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h3>删除</h3>
+			</div>
+			<div class="modal-body">
+				<p>你真的要删除它吗？</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn" data-dismiss="modal">关闭</a>
+				<a href="#" class="btn btn-danger" onclick="del()">删除</a>
+			</div>
+		</div>	
+		<div class="span5">		
+			<div class="pagination pull-left">
+		<%		if(query){  %>
+				<ul>
+					<li><a href="/bookslist?filed=<%- query.filed%>&sort=<%- query.sort%>&pageNo=<%-  pageNo<=1 ? 1 : pageNo-1   %>">Prev</a></li>
+					<%  if(pageNo-2>=1){  %>
+						<li><a href="/bookslist?filed=<%- query.filed%>&sort=<%- query.sort%>&pageNo=<%- pageNo-2 %>"><%- pageNo-2  %></a></li>
+				  <%   }  %>
+				   <%  if(pageNo-1>=1){  %>
+						<li><a href="/bookslist?filed=<%- query.filed%>&sort=<%- query.sort%>&pageNo=<%- pageNo -1 %>"><%- pageNo-1 %></a></li>
+				  <%  }  %>
+					
+					<li class="active"><a href="/bookslist?filed=<%- query.filed%>&sort=<%- query.sort%>&pageNo=<%- pageNo %>"><%- pageNo  %></a></li>
+				 <%   if(pageNo+1<=totalPage){ %>
+						<li><a href="/bookslist?filed=<%- query.filed%>&sort=<%- query.sort%>&pageNo=<%- pageNo + 1%>"><%- pageNo+1  %></a></li>
+				 <%   }  %>
+				  <%  if(pageNo+2<=totalPage){  %>
+						<li><a href="/bookslist?filed=<%- query.filed%>&sort=<%- query.sort%>&pageNo=<%- pageNo +  2 %>"><%- pageNo+2  %></a></li>
+				 <%   }  %>
+					<li><a href="/bookslist?filed=<%- query.filed%>&sort=<%- query.sort%>&pageNo=<%- pageNo>=totalPage ? totalPage : pageNo+1  %>">Next</a></li>
+				</ul>
+			<%	}else{  %>
+				<ul>
+					<li><a href="/bookslist?pageNo=<%-  pageNo<=1 ? 1 : pageNo-1   %>">Prev</a></li>
+					<%  if(pageNo-2>=1){  %>
+						<li><a href="/bookslist?pageNo=<%- pageNo-2 %>"><%- pageNo-2  %></a></li>
+				  <%   }  %>
+				   <%  if(pageNo-1>=1){  %>
+						<li><a href="/bookslist?pageNo=<%- pageNo -1 %>"><%- pageNo-1 %></a></li>
+				  <%  }  %>
+					
+					<li class="active"><a href="/bookslist?pageNo=<%- pageNo %>"><%- pageNo  %></a></li>
+				 <%   if(pageNo+1<=totalPage){ %>
+						<li><a href="/bookslist?pageNo=<%- pageNo + 1%>"><%- pageNo+1  %></a></li>
+				 <%   }  %>
+				  <%  if(pageNo+2<=totalPage){  %>
+						<li><a href="/bookslist?pageNo=<%- pageNo +  2 %>"><%- pageNo+2  %></a></li>
+				 <%   }  %>
+					<li><a href="/bookslist?pageNo=<%- pageNo>=totalPage ? totalPage : pageNo+1  %>">Next</a></li>
+				</ul>
+		<%	} %>
+			</div>
+		
+		</div>
+		
+
+		
+	</div>
+
+
+
+
+   
+		
+		<div class="row">
+		
+			<div class="span10 footer">
+			
+				<p>&copy; 皮皮璇科技有限公司</p>
+			
+			</div>
+		
+		</div>
+		
+	</div>
+	
+	</div> <!-- end span10 -->
+		
+	</div> <!-- end row -->
+		
+</div> <!-- end container -->
+
+
+
+<div class="modal fade hide " tabindex="-1" role="dialog" id="updatebox">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">编辑图书信息</h4>
+            </div>
+            <div class="modal-body">
+                <form   >
+                    <div class="form-group ">
+						<label for="titleControl">书名</label>
+						
+						<input type="text" class="form-control " id="titleControl"  name="title" placeholder="请输入书名" style="width: 80%">
+						<!-- <p id="booktitle_span">至少要输入个名字吧啊喂~</p> -->
+                    </div>
+                    <div class="form-group">
+                        <label for="priceControl">价格</label>
+                        <input type="number" class="form-control" id="priceControl"  name="price" placeholder="请输入价格" style="width: 80%">
+					</div> 
+					<div class="form-group">
+						<label for="authorControl">作者</label>
+						<input type="text" class="form-control" id="authorControl"  name="author" placeholder="请输入作者" style="width: 80%">
+					</div>
+					<div class="form-group">
+						<label for="publisherControl">出版社</label>
+						<input type="text" class="form-control" id="publisherControl"  name="publisher" placeholder="请输入出版社" style="width: 80%">
+					</div>      
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="gotoupdate()">确定</button>
+            </div>
+            </div>
+        </div>
+	</div>
+	
+
+
+	<div class="modal fade hide " tabindex="-1" role="dialog" id="insertbox">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">新增图书</h4>
+            </div>
+            <div class="modal-body">
+                <form   action="/lend/insert" method="POST">
+                    <div class="form-group ">
+						<label for="titleControl">书名</label>
+						
+						<input type="text" class="form-control " id="titleControl"  name="title" placeholder="请输入书名" style="width: 80%">
+						<!-- <p id="booktitle_span">至少要输入个名字吧啊喂~</p> -->
+                    </div>
+                    <div class="form-group">
+                        <label for="priceControl">价格</label>
+                        <input type="number" class="form-control" id="priceControl"  name="price" placeholder="请输入价格" style="width: 80%">
+					</div> 
+					<div class="form-group">
+                        <label for="averageControl">评分</label>
+                        <input type="number" class="form-control" id="averageControl"  name="average" placeholder="请输入评分" style="width: 80%">
+					</div>
+					<div class="form-group">
+						<label for="authorControl">作者</label>
+						<input type="text" class="form-control" id="authorControl"  name="author" placeholder="请输入作者" style="width: 80%">
+					</div>
+					<div class="form-group">
+						<label for="publisherControl">出版社</label>
+						<input type="text" class="form-control" id="publisherControl"  name="publisher" placeholder="请输入出版社" style="width: 80%">
+					</div>      
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="submit" class="btn btn-primary" >确定</a>
+			</div>
+		</form>
+            </div>
+        </div>
+    </div>
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.js"></script>
+<script src="assets/js/excanvas.min.js"></script>
+<script src="assets/js/jquery.flot.min.js"></script>
+<script src="assets/js/jquery.flot.resize.js"></script>
+<script type="text/javascript">
+var delId = null
+function setDelId(id){
+	delId = id;
+    console.log(delId);
+}
+
+function del(){
+	$.ajax({
+		url:"/delete",
+		method:'get',
+		data:{
+			id:delId,
+		},
+		success(result){
+			console.log(result);
+			$("#removeItem").modal("toggle");  // toggle 开关  
+			if(result["code"]==2){
+				alert(result["msg"])
+				window.location.href="/bookslist"
+			}else{
+				alert(result["msg"])
+			}
+			
+		}
+	})
+}
+
+
+var myuid = null;
+function update(id,title,price,author,publisher){
+	$("#titleControl").val(title);
+	$("#priceControl").val(price);
+	$("#authorControl").val(author);
+	$("#publisherControl").val(publisher);
+	myuid = id;
+}
+
+function gotoupdate(){
+	$.ajax({
+		url:"/update",
+		method:"get",
+		data:{
+			title:$("#titleControl").val(),
+			price:$("#priceControl").val(),
+			author:$("#authorControl").val(),
+			publisher:$("#publisherControl").val(),
+			uid:myuid
+		},
+		success(result){
+			console.log(result);
+			alert(result["msg"])
+			if(result["code"]==2){
+
+			}else{
+				$("#updatebox").modal("toggle");
+				window.location.href = "/bookslist "
+			}
+			  // toggle 开关  
+			
+		}
+	})
+}
+
+
+$(function () {
+    var d1 = [];
+        d1.push([0, 32]);
+        d1.push([1, 30]);
+        d1.push([2, 24]);
+        d1.push([3, 17]);
+        d1.push([4, 11]);
+        d1.push([5, 25]);
+        d1.push([6, 28]);
+        d1.push([7, 36]);
+        d1.push([8, 44]);
+        d1.push([9, 52]);
+        d1.push([10, 53]);
+        d1.push([11, 50]);
+        d1.push([12, 45]);
+        d1.push([13, 42]);
+        d1.push([14, 40]);
+        d1.push([15, 36]);
+        d1.push([16, 34]);
+        d1.push([17, 24]);
+        d1.push([18, 17]);
+        d1.push([19, 17]);
+        d1.push([20, 20]);
+        d1.push([21, 28]);
+        d1.push([22, 36]);
+        d1.push([23, 38]);
+
+    $.plot($("#placeholder"), [ d1 ], { grid: { backgroundColor: 'white', color: '#999', borderWidth: 1, borderColor: '#DDD' }, colors: ["#FC6B0A"], series: { lines: { show: true, fill: true, fillColor: "rgba(253,108,11,0.4)" } } });
+});
+</script>
+
+
+</body>
+</html>

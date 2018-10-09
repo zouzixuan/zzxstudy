@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>注册</title>
+<link href="./Wopop_files/style_log.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="./Wopop_files/style.css">
+<link rel="shortcut icon" href="#" >
+<script src="/bootstrap/js/jquery-1.10.1.js"></script>
+<meta name="referrer" content="no-referrer"/>
+<style>
+.login_boder p.forgot a{font-size: 14px}
+.login_boder p.forgot a:hover{color:#f89406 }
+.login_boder{background-size: 100% 100%;height: 440px;}
+.charuspan{font-size: 12px;margin-top: -5px;}
+</style>
+</head>
+
+<body class="login" mycollectionplug="bind">
+<div class="login_m">
+<div class="login_logo">
+    <h1>zzx图书后台管理系统</h1>
+</div>
+
+<div class="login_boder">
+
+<div class="login_padding" id="login_model">
+
+<form action="/users/register" method="POST">
+  <h2>用户名</h2>
+  <label>
+    <input type="text" id="username" class="txt_input " placeholder="3-12位字母数字下划线减号" name="username">
+  </label>
+  <h2 class="charuspan " id="username_span"></h2>
+  <h2>密码</h2>
+  <label>
+    <input type="password" id="userpwd" class="txt_input" placeholder="4-12位字母数字" name="userpwd">
+  </label>
+  <h2 class="charuspan" id="userpwd_span"></h2>
+  <h2>确认密码</h2>
+  <label>
+        
+    <input type="password" id="userpwd2" class="txt_input">
+  </label>
+  <h2 class="charuspan" id="userpwd2_span"></h2>
+  <p class="forgot"><a id="iforget" href="/login">已有账号，直接登录</a></p>
+  <div class="rem_sub">  
+    <label>
+      <input type="submit" class="sub_button" name="button" id="button" value="注册" style="opacity: 0.7;" onclick="return test()">
+    </label>
+
+</form>
+  </div>
+</div>
+</div>
+</div>
+</div>
+ <br> <br>
+<p align="center" style="margin-top:100px"> @zzx科技有限公司</p>
+</body>
+<script>
+function yanzhengUsername(){
+if($("#username").val()){
+    if(/^[a-zA-Z0-9_-]{3,16}$/.test($("#username").val())){
+        $("#username_span").html("√").css("color","green")
+        return true
+    }else{
+        $("#username_span").html("用户名格式非法！").css("color","#f89406")
+        return false
+    }
+}else{
+    $("#username_span").html("用户名不能为空！").css("color","#f89406")
+    return false
+}
+}
+// $(".username").keydown(yanzhengUsername)
+$("#username").blur(yanzhengUsername)
+$("#username").keyup(yanzhengUsername)
+//稍微写下验证
+function yanzhengUserpwd(){
+    if($("#userpwd").val()){
+        if(/^[a-zA-Z0-9]{4,16}$/.test($("#userpwd").val())){
+            $("#userpwd_span").html("√").css("color","green")
+            return true
+        }else{
+            $("#userpwd_span").html("密码格式非法！").css("color","#f89406")
+            return false
+    }
+    }else{
+        $("#userpwd_span").html("密码不能为空！").css("color","#f89406")
+        return false
+    }
+}
+$("#userpwd").blur(yanzhengUserpwd)
+$("#userpwd").keyup(yanzhengUserpwd)
+
+function yanzhengpwd2(){
+    if($("#userpwd").val()==$("#userpwd2").val()&&$("#userpwd").val()){
+        $("#userpwd2_span").html("√").css("color","green")
+        return true
+    }else{
+        $("#userpwd2_span").html("两次密码输入不一致").css("color","#f89406")
+        return false
+    }
+}
+$("#userpwd2").blur(yanzhengpwd2)
+$("#userpwd2").keyup(yanzhengpwd2)
+
+function test(){
+        if(yanzhengUsername()&&yanzhengUserpwd()&&yanzhengpwd2()){
+            return true;
+        }else{
+            return false;
+        }
+        
+    }
+</script>
+</html>

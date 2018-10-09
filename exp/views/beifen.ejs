@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8">
+    <title>图书详情</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="referrer" content="no-referrer"/>
+    
+    <link href="http://fonts.googleapis.com/css?family=Oxygen|Marck+Script" rel="stylesheet" type="text/css">
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/font-awesome.css" rel="stylesheet">
+    <link href="assets/css/admin.css" rel="stylesheet">
+    
+    <link rel="shortcut icon" href="#" >
+    <!-- <script src="/bootstrap/js/jquery-1.10.1.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/javascripts/xheditor/xheditor-1.2.2.min.js"></script>
+    <script src="/javascripts/xheditor/xheditor_lang/zh-cn.js"></script> -->
+    
+<style>
+.introduce{display: block;
+                display: -webkit-box;
+                margin: 0 auto;
+                -webkit-line-clamp: 2;    
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;margin-bottom: 20px;cursor: pointer;}
+                .introduce:hover{text-decoration: underline;}
+</style>
+</head>    
+<body>
+
+<div class="container">
+		
+	<div class="row">
+		
+		<div class="span2">
+		
+		<div class="main-left-col">
+		
+			<h1><i class="icon-shopping-cart icon-large"></i>zzxlibraby</h1>
+			
+			<ul class="side-nav">
+
+				<li class="active">
+					<a href="/"><i class="icon-home"></i> 首页概况</a>
+				</li>
+				<li class="dropdown">
+            <a href="/lend"><i class="icon-sitemap"></i> 借阅管理</a>
+					
+				</li>
+				<li class="dropdown">
+            <a href="/bookslist"><i class="icon-shopping-cart"></i> 全部图书</a>
+				</li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="collapse" data-target="#reports-dropdown" href="#"><i class="icon-signal"></i> 评论管理 <b class="caret"></b></a>
+					<ul id="reports-dropdown" class="collapse">
+						<li><a href="/commentslist">评论列表</a></li>
+					</ul>
+				</li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="collapse" data-target="#members-dropdown" href="#"><i class="icon-group"></i> 会员管理 <b class="caret"></b></a>
+					<ul id="members-dropdown" class="collapse">
+						<li><a href="/users">所有会员</a></li>
+						<li><a href="/userdetail?username=<%- username%>">修改我的信息</a></li>
+						<li><a href="/changeAdmin">修改管理员权限</a></li>
+					</ul>
+				</li>
+				<li><a href="/notice"><i class="icon-bullhorn"></i> 公告 </a></li>
+			</ul>
+		
+		</div> <!-- end main-left-col -->
+	
+	</div> <!-- end span2 -->
+	
+	<div class="span10">
+		
+	<div class="secondary-masthead">
+	
+		<ul class="nav nav-pills pull-right">
+			<li>
+				<a href="/chat"><i class="icon-globe"></i> 进入多人在线聊天室~</a>
+			</li>
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> <%- username%> <b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a href="/userdetail?username=<%- username%>"><%- username%>的信息</a></li>
+					<li class="active"><a href="/notice">欢迎来我的网站~</a></li>
+					<li class="divider"></li>
+					<li><a href="loginout">注销</a></li>
+				</ul>
+			</li>
+		</ul>
+
+		<ul class="breadcrumb">
+			<li>
+				<a href="/">zzx图书管理系统</a> <span class="divider">/</span>
+			</li>
+            <li class="active"><a href="/bookslist">全部图书</a></li>
+            <span class="divider">/</span>
+			</li>
+            <li class="active">评论页面详情</li>
+		</ul>
+		
+	</div>
+	
+    <!--下面是 内容 -->
+    <div class="row" >
+        <div class="span10">
+            <div class="slate">
+                <!-- <img src="" alt=""> -->
+                <h1><%- bookresult.title%></h1>
+                <div style="overflow:hidden;margin-top: 10px;">
+          <%          if(bookresult.images){   %>
+
+                   
+                <img src="<%- bookresult['images']['small']%>" alt="" style="float: left;">
+     <%       }   %>
+                <div style="float: left;margin-left: 5px;">
+                    <p>作者:<%- bookresult.author%></p>
+                    <p>出版社:<%- bookresult.publisher%></p>
+                    <p>出版年:<%- bookresult["pubdate"]%></p>
+                    <p>页数:<%- bookresult["pages"]%></p>
+                    <p>装帧:<%- bookresult["binding"]%></p>
+                    <p>定价:<%- bookresult["price"]%></p>
+                    <p>豆瓣评分:<%- bookresult["rating.average"]%></p>
+                    <p>ISBN:<%- bookresult["isbn13"]%></p>
+                    
+                </div>
+            </div>
+                <h3>作者简介</h3>
+                <p class="introduce"><%- bookresult["author_intro"]%></p>
+                <h3>内容简介</h3>
+                <p class="introduce"><%- bookresult["summary"]%></p>
+            </div>
+        </div>
+        <div class="span10">
+            <div class="slate">
+                <h3 class="caption text-info">发布评论</h3>
+                <form action="/comments/pinglun?id=<%- id%>" method="POST" >
+                        <div class="form-group">
+                            <textarea   name="content" class="form-control" id="contentControl" cols="20" rows="10" placeholder="请输入内容" style="width: 100%;height: 100px"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">提交评论</button>
+                          
+                </form>
+            </div>
+        </div>
+    </div>
+   
+    <div class="row">
+		
+			<div class="span10">
+			
+				<div class="slate">
+				
+					<div class="page-header">
+						<h2><a class="pull-right iconlink" href=""><i class="icon-rss"></i></a>图书评论</h2>
+					</div>
+				
+					<table class="orders-table table">
+					<tbody>
+						
+                        
+                      <%  commentsresult.forEach(function(item,index){  %>
+                            <tr>
+                                <td>
+                                    <p style="color:#fc6b0a"><%- ++index%>楼：<a href="/userdetail?username=<%- item.username%>"><%-  item.username%></a></p>
+                                    <p><%-  item.content%></p>
+                                </td>
+                                <td class="date"><%-  item.enterTime%></td>
+                            </tr>
+                   <%     }) %>
+						
+					</tbody>
+					</table>
+
+				</div>
+			
+			</div>
+		
+
+		
+		</div>
+		
+		<div class="row">
+		
+			<div class="span10 footer">
+			
+				<p>&copy; 皮皮璇科技有限公司</p>
+			
+			</div>
+		
+		</div>
+		
+	</div>
+	
+	</div> <!-- end span10 -->
+		
+	</div> <!-- end row -->
+		
+</div> <!-- end container -->
+
+
+
+
+
+
+
+    
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.js"></script>
+<script src="assets/js/excanvas.min.js"></script>
+<script src="assets/js/jquery.flot.min.js"></script>
+<script src="assets/js/jquery.flot.resize.js"></script>
+<script type="text/javascript">
+
+
+
+
+
+
+    $(".introduce").click(function(){
+        if($(this).css("overflow")=="hidden"){
+        $(this).css({"overflow":"auto","display":"table"})
+    }else{
+        $(this).css({"overflow":"hidden","display":"-webkit-box"})
+    }
+    })
+
+
+</script>
+
+<script src="bootstrap/js/jquery-1.10.1.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="javascripts/xheditor/xheditor-1.2.2.min.js"></script>
+    <script src="javascripts/xheditor/xheditor_lang/zh-cn.js"></script>
+    <script>
+        // $("#contentControl").xheditor()
+        
+
+        $(pageInit);
+
+//  comment.ejs  /comment/index
+function pageInit(){
+    $.extend(XHEDITOR.settings,{shortcuts:{"ctrl+enter":submitForm}});
+    // $("#ele").xheditor();
+    $("#contentControl").xheditor({   //初始化 富文件编辑框
+        html5Upload:false,
+        upMultiple:"1",
+
+        upLinkRrl:"upload.html",
+        upLinkExt:"zip,rar,txt",
+
+        upImgUrl:"/comments/updateImg",   // 图片上传的服务器  
+        upImgExt:"jpg,jpeg,gif,png",
+
+        upFlashUrl:"upload.php",
+        upFlashExt:"swf",
+
+        upMediaUrl:"upload.php",
+        upMediaExt:"wmv,avi,wma,mp3,mid"
+
+    });
+};
+
+function insertUpload(arrMsg){
+    console.log(arrMsg);
+    var i,msg;
+    for(var i=0;i<arrMsg.length;i++){
+        msg=arrMsg[i];
+        console.log(msg);
+        $("#uploadList").append('<option value="'+msg.id+'">'+msg.localname+'</option>')
+    }
+};
+
+function submitForm(){
+    $("#frmDemo").submit();
+}
+    </script>
+</body>
+
+</html>

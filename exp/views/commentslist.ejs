@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8">
+    <title>评论列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="referrer" content="no-referrer"/>
+    <link href="http://fonts.googleapis.com/css?family=Oxygen|Marck+Script" rel="stylesheet" type="text/css">
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/font-awesome.css" rel="stylesheet">
+    <link href="assets/css/admin.css" rel="stylesheet">
+    <link rel="shortcut icon" href="#" >
+    <style>
+    .mycontent{max-width: 400px}
+    </style>
+
+</head>    
+<body>
+
+<div class="container">
+		
+	<div class="row">
+		
+		<div class="span2">
+		
+		<div class="main-left-col">
+		
+			<h1><i class="icon-shopping-cart icon-large"></i>zzxlibraby</h1>
+			
+			<ul class="side-nav">
+
+				<li class="active">
+					<a href="/"><i class="icon-home"></i> 首页概况</a>
+				</li>
+				<li class="dropdown">
+            <a href="/lend"><i class="icon-sitemap"></i> 借阅管理</a>
+					
+				</li>
+				<li class="dropdown">
+            <a href="/bookslist"><i class="icon-shopping-cart"></i> 全部图书</a>
+				</li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="collapse" data-target="#reports-dropdown" href="#"><i class="icon-signal"></i> 评论管理 <b class="caret"></b></a>
+					<ul id="reports-dropdown" class="collapse">
+						<li><a href="/commentslist">评论列表</a></li>
+						
+					</ul>
+				</li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="collapse" data-target="#members-dropdown" href="#"><i class="icon-group"></i> 会员管理 <b class="caret"></b></a>
+					<ul id="members-dropdown" class="collapse">
+						<li><a href="/users">所有会员</a></li>
+						<li><a href="/userdetail?username=<%- username%>">修改我的信息</a></li>
+						<li><a href="/changeAdmin">修改管理员权限</a></li>
+					</ul>
+				</li>
+				<li><a href="/notice"><i class="icon-bullhorn"></i> 公告 </a></li>
+			</ul>
+		
+		</div> <!-- end main-left-col -->
+	
+	</div> <!-- end span2 -->
+	
+	<div class="span10">
+		
+	<div class="secondary-masthead">
+	
+		<ul class="nav nav-pills pull-right">
+			<li>
+				<a href="/chat"><i class="icon-globe"></i> 进入多人在线聊天室~</a>
+			</li>
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> <%- username%> <b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a href="/userdetail?username=<%- username%>"><%- username%>的信息</a></li>
+					<li class="active"><a href="/notice">欢迎来我的网站~</a></li>
+					<li class="divider"></li>
+					<li><a href="loginout">注销</a></li>
+				</ul>
+			</li>
+		</ul>
+
+		<ul class="breadcrumb">
+			<li>
+				<a href="/">zzx图书管理系统</a> <span class="divider">/</span>
+			</li>
+			<li class="active">评论列表</li>
+		</ul>
+		
+    </div>
+    
+<!-- 差内容	 -->
+<div class="main-area dashboard">
+	
+	<div class="alert alert-info">
+		<a class="close" data-dismiss="alert" href="#">x</a>
+		<h4 class="alert-heading">本页使用说明：</h4>
+		1.分页，只看本人评论，看所有评论;2.点击书名进入书详情，点击用户名进入用户详情；3.普通用户只可以操作自己的评论，管理员权限：操作所有人的评论，超级管理员权限：一键删除所有
+	</div>
+	
+	<div class="row">
+	
+		<div class="span10">
+		
+			<div class="slate">
+					<a href="/commentslist?my=1" class="btn btn-default">查看我的评论</a>
+					<a href="/commentslist" class="btn btn-default">查看全部评论</a>
+
+			
+			</div>
+		
+		</div>
+	
+	</div>
+	
+	<div class="row">
+		
+		<div class="span10 listing-buttons">
+		
+		<!-- 	<button class="btn btn-info">Action</button> -->
+		
+			<button class="btn btn-danger" data-toggle="modal" href="#removeItem" onclick="setDelId('-1')">删除全部</button>	
+		</div>
+		
+		<div class="span10">
+		
+			<div class="slate">
+			
+				<div class="page-header">
+					<div class="btn-group pull-right">
+						<button class="btn dropdown-toggle" data-toggle="dropdown">
+							<i class="icon-download-alt"></i>打印导出
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li><a href="">CSV</a></li>
+							<li><a href="">Excel</a></li>
+							<li><a href="">PDF</a></li>
+						</ul>
+					</div>
+					<h2>My Comments Listings</h2>
+				</div>
+			
+				<table class="orders-table table">
+				<thead>
+					<tr>
+						<th>评论内容</th>
+						<th>评论人</th>
+						<th>书名</th>
+						<th class="actions">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- <tr>
+						<td class="mycontent"><span >评论内容</span><br /><span class="meta">Added Today</span></td>
+						<td><a href="">用户名用户名用户名用户名用户名</a></td>
+						<td><a href="">书名用户名用户名用户名用户名</a> </td>
+						<td class="actions">
+							<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>
+							<a class="btn btn-small btn-primary" href="form.html">编辑</a>
+						</td>
+					</tr> -->
+		<%		result.forEach(function(item,index){  %>
+                    <tr>
+                        <td class="mycontent"><span ><%- item.content%></span><br /><span class="meta"><%- item.enterTime%></span></td>
+                        <td><a href="/userdetail?username=<%- item.username%>"><%- item.username%></a></td>
+                        <td><a href="/bookdetail?id=<%- item.bookid%>"><%- item.booktitle%></a> </td>
+                
+                        <td class="actions">
+                                <%    if(username==item.username||isAdmin==1||isAdmin==2){ %>
+                            <a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem" onclick="setDelId('<%- item._id  %>')">删除</a>
+                            <a class="btn btn-small btn-primary"  data-toggle="modal" data-target="#updatebox" onclick="update('<%= item._id %>','<%= item.content %>')">编辑</a>
+                            <%       } %>
+                        </td>
+             
+                    </tr>
+           <%     })   %>
+					<!-- 重复 -->
+				</tbody>
+            </table>
+            <div class="span5">		
+                    <div class="pagination pull-left">
+                        <ul>
+                            <li><a href="/commentslist?pageNo=<%-  pageNo<=1 ? 1 : pageNo-1   %>">Prev</a></li>
+                            <%  if(pageNo-2>=1){  %>
+                                <li><a href="/commentslist?pageNo=<%- pageNo-2 %>"><%- pageNo-2  %></a></li>
+                          <%   }  %>
+                           <%  if(pageNo-1>=1){  %>
+                                <li><a href="/commentslist?pageNo=<%- pageNo -1 %>"><%- pageNo-1 %></a></li>
+                          <%  }  %>
+                            
+                            <li class="active"><a href="/commentslist?pageNo=<%- pageNo %>"><%- pageNo  %></a></li>
+                         <%   if(pageNo+1<=totalPage){ %>
+                                <li><a href="/commentslist?pageNo=<%- pageNo + 1%>"><%- pageNo+1  %></a></li>
+                         <%   }  %>
+                          <%  if(pageNo+2<=totalPage){  %>
+                                <li><a href="/commentslist?pageNo=<%- pageNo +  2 %>"><%- pageNo+2  %></a></li>
+                         <%   }  %>
+                            <li><a href="/commentslist?pageNo=<%- pageNo>=totalPage ? totalPage : pageNo+1  %>">Next</a></li>
+                        </ul>
+                    </div>
+                
+                </div>
+			</div>	
+		</div>	
+		<div class="modal hide fade" id="removeItem">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h3>删除</h3>
+			</div>
+			<div class="modal-body">
+				<p>你真的要删除它吗？</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn" data-dismiss="modal">关闭</a>
+				<a href="#" class="btn btn-danger" onclick="del()">删除</a>
+			</div>
+		</div>	
+		
+		
+
+		
+	</div>
+
+
+
+
+   
+		
+		<div class="row">
+		
+			<div class="span10 footer">
+			
+				<p>&copy; 皮皮璇科技有限公司</p>
+			
+			</div>
+		
+		</div>
+		
+	</div>
+	
+	</div> <!-- end span10 -->
+		
+	</div> <!-- end row -->
+		
+</div> <!-- end container -->
+
+
+
+<div class="modal fade hide " tabindex="-1" role="dialog" id="updatebox">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">编辑评论</h4>
+            </div>
+            <div class="modal-body">
+                <form   >
+                    <div class="form-group ">
+						<label for="contentControl">修改评论内容</label>
+						
+						<textarea class="form-control" name="" id="contentControl" cols="30" rows="10" name="content" style="width: 90%"></textarea>
+						<!-- <p id="booktitle_span">至少要输入个名字吧啊喂~</p> -->
+                    </div> 
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="gotoupdate()">确定</button>
+            </div>
+            </div>
+        </div>
+	</div>
+	<script>
+			// $("#contentControl").xheditor();   // 插件实例化   
+	
+			$(pageInit);
+	
+			//  comment.ejs  /comment/index
+			function pageInit(){
+				$.extend(XHEDITOR.settings,{shortcuts:{"ctrl+enter":submitForm}});
+				// $("#ele").xheditor();
+				$("#contentControl").xheditor({   //初始化 富文件编辑框
+					html5Upload:false,
+					upMultiple:"1",
+	
+					upLinkRrl:"upload.html",
+					upLinkExt:"zip,rar,txt",
+	
+					upImgUrl:"/comments/updateImg",   // 图片上传的服务器  
+					upImgExt:"jpg,jpeg,gif,png",
+	
+					upFlashUrl:"upload.php",
+					upFlashExt:"swf",
+	
+					upMediaUrl:"upload.php",
+					upMediaExt:"wmv,avi,wma,mp3,mid"
+	
+				});
+			};
+	
+			function insertUpload(arrMsg){
+				console.log(arrMsg);
+				var i,msg;
+				for(var i=0;i<arrMsg.length;i++){
+					msg=arrMsg[i];
+					console.log(msg);
+					$("#uploadList").append('<option value="'+msg.id+'">'+msg.localname+'</option>')
+				}
+			};
+	
+			function submitForm(){
+				$("#frmDemo").submit();
+			}
+			</script>	
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.js"></script>
+<script src="assets/js/excanvas.min.js"></script>
+<script src="assets/js/jquery.flot.min.js"></script>
+<script src="assets/js/jquery.flot.resize.js"></script>
+<script type="text/javascript">
+var delId = null
+function setDelId(id){
+	delId = id;
+    console.log(delId);
+}
+//删除
+function del(){
+	$.ajax({
+		url:"/comments/delete",
+		method:'get',
+		data:{
+			id:delId,
+		},
+		success(result){
+			console.log(result);
+			$("#removeItem").modal("toggle");  // toggle 开关  
+			if(result["code"]==2){
+				alert(result["msg"])
+				window.location.href="/commentslist"
+			}else{
+				alert(result["msg"])
+			}
+			
+		}
+	})
+}
+//更新
+var myuid = null;
+function update(id,content){
+    console.log(id,content)
+	$("#contentControl").val(content);
+	myuid = id;
+}
+
+function gotoupdate(){
+	$.ajax({
+		url:"/comments/update",
+		method:"get",
+		data:{
+			content:$("#contentControl").val(),
+			uid:myuid
+		},
+		success(result){
+			console.log(result);
+			alert(result["msg"])
+			if(result["code"]==2){
+
+			}else{
+				$("#updatebox").modal("toggle");
+				window.location.href = "/commentslist "
+			}
+			  // toggle 开关  
+			
+		}
+	})
+}
+
+
+$(function () {
+    var d1 = [];
+        d1.push([0, 32]);
+        d1.push([1, 30]);
+        d1.push([2, 24]);
+        d1.push([3, 17]);
+        d1.push([4, 11]);
+        d1.push([5, 25]);
+        d1.push([6, 28]);
+        d1.push([7, 36]);
+        d1.push([8, 44]);
+        d1.push([9, 52]);
+        d1.push([10, 53]);
+        d1.push([11, 50]);
+        d1.push([12, 45]);
+        d1.push([13, 42]);
+        d1.push([14, 40]);
+        d1.push([15, 36]);
+        d1.push([16, 34]);
+        d1.push([17, 24]);
+        d1.push([18, 17]);
+        d1.push([19, 17]);
+        d1.push([20, 20]);
+        d1.push([21, 28]);
+        d1.push([22, 36]);
+        d1.push([23, 38]);
+
+    $.plot($("#placeholder"), [ d1 ], { grid: { backgroundColor: 'white', color: '#999', borderWidth: 1, borderColor: '#DDD' }, colors: ["#FC6B0A"], series: { lines: { show: true, fill: true, fillColor: "rgba(253,108,11,0.4)" } } });
+});
+</script>
+
+
+</body>
+</html>

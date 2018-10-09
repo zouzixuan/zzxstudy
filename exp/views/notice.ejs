@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8">
+    <title>首页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="referrer" content="no-referrer"/>
+    <link href="http://fonts.googleapis.com/css?family=Oxygen|Marck+Script" rel="stylesheet" type="text/css">
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/font-awesome.css" rel="stylesheet">
+    <link href="assets/css/admin.css" rel="stylesheet">
+    <link rel="shortcut icon" href="#" >
+
+
+</head>    
+<body>
+
+<div class="container">
+		
+	<div class="row">
+		
+		<div class="span2">
+		
+		<div class="main-left-col">
+		
+			<h1><i class="icon-shopping-cart icon-large"></i>zzxlibraby</h1>
+			
+			<ul class="side-nav">
+
+				<li class="active">
+					<a href="/"><i class="icon-home"></i> 首页概况</a>
+				</li>
+				<li class="dropdown">
+            <a href="/lend"><i class="icon-sitemap"></i> 借阅管理</a>
+					
+				</li>
+				<li class="dropdown">
+            <a href="/bookslist"><i class="icon-shopping-cart"></i> 全部图书</a>
+				</li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="collapse" data-target="#reports-dropdown" href="#"><i class="icon-signal"></i> 评论管理 <b class="caret"></b></a>
+					<ul id="reports-dropdown" class="collapse">
+						<li><a href="/commentslist">评论列表</a></li>
+					</ul>
+				</li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="collapse" data-target="#members-dropdown" href="#"><i class="icon-group"></i> 会员管理 <b class="caret"></b></a>
+					<ul id="members-dropdown" class="collapse">
+						<li><a href="/users">所有会员</a></li>
+						<li><a href="/userdetail?username=<%- username%>">修改我的信息</a></li>
+						<li><a href="/changeAdmin">修改管理员权限</a></li>
+					</ul>
+				</li>
+				<li><a href="/notice"><i class="icon-bullhorn"></i> 公告 </a></li>
+			</ul>
+		
+		</div> <!-- end main-left-col -->
+	
+	</div> <!-- end span2 -->
+	
+	<div class="span10">
+		
+	<div class="secondary-masthead">
+	
+		<ul class="nav nav-pills pull-right">
+			<li>
+				<a href="/chat"><i class="icon-globe"></i> 进入多人在线聊天室~</a>
+			</li>
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> <%- username%> <b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a href="/userdetail?username=<%- username%>"><%- username%>的信息</a></li>
+					<li class="active"><a href="/notice">欢迎来我的网站~</a></li>
+					<li class="divider"></li>
+					<li><a href="loginout">注销</a></li>
+				</ul>
+			</li>
+		</ul>
+
+		<ul class="breadcrumb">
+			<li>
+				<a href="/">zzx图书管理系统</a> <span class="divider">/</span>
+			</li>
+			<li class="active">网站公告</li>
+		</ul>
+		
+    </div>
+    
+    <div class="alert alert-warning" style="margin-top:30px">
+		<a class="close" data-dismiss="alert" href="#">x</a>
+		<h4 class="alert-heading">本页使用说明：</h4>
+		本来写的是管理员可改，为了体现我的匿名功能，那就所有人都能改吧~
+	</div>
+<!-- 差内容	 -->
+
+
+    <div class="row">
+        <div class="span10">
+            <div class="slate">
+                <div class="page-header">
+                    <button class="btn btn-info" data-toggle="modal" href="#updatebox">修改公告</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<div class="row">
+    <div class="span10">
+        <div class="slate">
+            <div class="page-header">
+                <h2>公告标题：<%- result['noticeTitle']%></h2>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span10">
+        <div class="slate">
+            <div class="page-header">
+                    
+                    <p><%- result['noticeContent']%></p>
+                <p class="pull-right">最后修改时间：<%- result['enterTime']%></p>
+                <p >修改人：<%- result['username']%></p>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal hide fade" id="updatebox">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h3>修改公告</h3>
+        </div>
+        <div class="modal-body">
+                <div class="control-group" >
+                        <label class="control-label" for="input01">公告标题</label>
+                        <div class="controls">
+                          <input type="text" class="input-xlarge" id="noticeTitle" style="width:90%">
+                        
+                        </div>
+                      </div>
+                      
+                      
+                      <div class="control-group">
+                        <label class="control-label" for="textarea">公告内容</label>
+                        <div class="controls">
+                          <textarea style="width:90%" class="input-xlarge" id="noticeContent" rows="5"></textarea>
+                        </div>
+                      </div>
+                      <div class="control-group">
+                            <div class="controls">
+                              <label class="checkbox">
+                                <input type="checkbox" id="optionsCheckbox" value="option1">
+                                匿名发布
+                              </label>
+                            </div>
+                          </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal">关闭</a>
+            <a href="#" class="btn btn-danger" onclick="changeNotice()">确定</a>
+        </div>
+    </div>	
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.js"></script>
+<script src="assets/js/excanvas.min.js"></script>
+<script src="assets/js/jquery.flot.min.js"></script>
+<script src="assets/js/jquery.flot.resize.js"></script>
+<script type="text/javascript">
+
+function changeNotice(){
+    if($("#noticeTitle").val()&&$("#noticeContent").val()){
+
+    
+    $.ajax({
+		url:"/comments/notice",
+		method:"get",
+		data:{
+			noticeTitle:$("#noticeTitle").val(),
+			noticeContent:$("#noticeContent").val(),
+			checked:$("#optionsCheckbox").prop("checked")
+		},
+		success(result){
+			console.log(result);
+			alert(result["msg"])
+			if(result["code"]==2){
+
+			}else{
+				$("#updatebox").modal("toggle");
+				window.location.href = "/notice "
+			}
+			  // toggle 开关  
+			
+		}
+    })
+}else{
+    alert("请输入标题和内容哦！")
+}
+}
+
+$(function () {
+    var d1 = [];
+        d1.push([0, 32]);
+        d1.push([1, 30]);
+        d1.push([2, 24]);
+        d1.push([3, 17]);
+        d1.push([4, 11]);
+        d1.push([5, 25]);
+        d1.push([6, 28]);
+        d1.push([7, 36]);
+        d1.push([8, 44]);
+        d1.push([9, 52]);
+        d1.push([10, 53]);
+        d1.push([11, 50]);
+        d1.push([12, 45]);
+        d1.push([13, 42]);
+        d1.push([14, 40]);
+        d1.push([15, 36]);
+        d1.push([16, 34]);
+        d1.push([17, 24]);
+        d1.push([18, 17]);
+        d1.push([19, 17]);
+        d1.push([20, 20]);
+        d1.push([21, 28]);
+        d1.push([22, 36]);
+        d1.push([23, 38]);
+
+    $.plot($("#placeholder"), [ d1 ], { grid: { backgroundColor: 'white', color: '#999', borderWidth: 1, borderColor: '#DDD' }, colors: ["#FC6B0A"], series: { lines: { show: true, fill: true, fillColor: "rgba(253,108,11,0.4)" } } });
+});
+</script>
+
+
+</body>
+</html>
